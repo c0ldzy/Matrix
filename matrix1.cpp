@@ -48,6 +48,33 @@ public:
         if(i % 2 == 1) return Matrix(data) * Matrix(data).pow(i - 1);
     }
 
+    T det()
+    {
+        //cout << n << " " << m << endl;
+        if(n == 1) return data[0][0];
+
+        T s = 0;
+        int u = 1;
+
+        for(int k = 0; k < n; k++)
+        {
+            Matrix<T> b = Matrix(n - 1, m - 1);
+            //cout << b << endl;
+            for(int i = 1; i < n; i++)
+                for(int j = 0; j < m - 1; j++)
+                {
+                    if(j < k) b[i - 1][j] = data[i][j];
+                    else b[i - 1][j] = data[i][j + 1];
+                }
+
+            //cout << b << endl;
+            s += data[0][k] * b.det() * u;
+            u *= -1;
+        }
+        return s;
+    }
+
+
     vector<T>& operator[](int i) {return data[i];};
     const vector<T>& operator[](int i) const {return data[i];};
 
@@ -68,7 +95,8 @@ Matrix<T>::Matrix(int n_, int m_)
 {
     n = n_;
     m = m_;
-    rep(i, 0, n) data[i].assign(m, 0);
+    vector<vector<T> > v(n, vector<T> (m, 0));
+    data = v;
 }
 
 template<typename T>
@@ -111,17 +139,6 @@ const Matrix<T> Matrix<T>::operator*(const Matrix& a) const
 }
 
 template<typename T>
-const Matrix<T> Matrix<T>::operator^(int x) const
-{
-    vector<vector<T> > res(n, vector<T> (m));
-    if(n == m)
-    {
-
-    }
-    return Matrix(res);
-}
-
-template<typename T>
 ostream& operator<<(ostream& out, const Matrix<T>& a)
 {
     rep(i, 0, a.n) {rep(j, 0, a.m)
@@ -139,6 +156,30 @@ istream &operator>>(istream& in, Matrix<T>& a)
 
 int main()
 {
+    cout << "Quick offer!!!" << endl << "Wanna find a determinator of a matrix?" << endl << endl;
+    cout << "(Type 1 if yes)" << endl << endl;
+
+    string ss;
+    cin >> ss;
+    if(ss == "1")
+    {
+        cout << "Enter the size of your first matrix (n = m, so one number only)" << endl << endl;
+
+        int n, m;
+        cin >> n;
+        m = n;
+        cout << endl << "Now enter the elements of ur matrix" << endl << endl;
+        vector<vector<int> > v(n, vector<int> (m));
+        rep(i, 0, n) rep(j, 0, m) cin >> v[i][j];
+        Matrix<int> a = Matrix<int>(v);
+        cout << a.det() << endl << endl;
+        return 0;
+    }
+    else
+    {
+        cout << endl;
+    }
+
     cout << "." << endl << "." << endl << "." << endl;
     cout << "Hey, follow @kazutora.empire on Instagram for free usage of this thing" << endl;
     cout << "Press Enter when u r done" << endl;
@@ -308,3 +349,4 @@ int main()
 
     return 0;
 }
+
